@@ -1,0 +1,3 @@
+[submodule "external/QC-App-Oriented-Benchmarks"]
+	path = external/QC-App-Oriented-Benchmarks
+	url = https://github.com/SRI-International/QC-App-Oriented-Benchmarks.git
