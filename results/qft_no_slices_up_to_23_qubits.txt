@@ -1,0 +1,254 @@
+/home/george/projects/latticesurgery-com/lattice-surgery-compiler/venv/bin/python /home/george/projects/latticesurgery-com/benchmark/qft_no_slices.py
+Circuit as Pauli rotations:
+14 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+20 rotations of which 2 pi/8
+
+Converting to logical lattice computation
+
+75 operations
+Ran with 2 qubits in 0.2591102123260498 seconds.
+
+Circuit as Pauli rotations:
+33 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+945 rotations of which 200 pi/8
+
+Converting to logical lattice computation
+
+4544 operations
+Ran with 3 qubits in 0.4909374713897705 seconds.
+
+Circuit as Pauli rotations:
+60 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+2782 rotations of which 598 pi/8
+
+Converting to logical lattice computation
+
+13445 operations
+Ran with 4 qubits in 0.8144240379333496 seconds.
+
+Circuit as Pauli rotations:
+95 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+5539 rotations of which 1196 pi/8
+
+Converting to logical lattice computation
+
+26816 operations
+Ran with 5 qubits in 1.3126981258392334 seconds.
+
+Circuit as Pauli rotations:
+138 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+9212 rotations of which 1990 pi/8
+
+Converting to logical lattice computation
+
+44625 operations
+Ran with 6 qubits in 1.927267074584961 seconds.
+
+Circuit as Pauli rotations:
+189 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+13813 rotations of which 2988 pi/8
+
+Converting to logical lattice computation
+
+66952 operations
+Ran with 7 qubits in 2.736443519592285 seconds.
+
+Circuit as Pauli rotations:
+248 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+19350 rotations of which 4190 pi/8
+
+Converting to logical lattice computation
+
+93829 operations
+Ran with 8 qubits in 3.658273935317993 seconds.
+
+Circuit as Pauli rotations:
+315 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+25775 rotations of which 5588 pi/8
+
+Converting to logical lattice computation
+
+125032 operations
+Ran with 9 qubits in 4.855837106704712 seconds.
+
+Circuit as Pauli rotations:
+390 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+33118 rotations of which 7186 pi/8
+
+Converting to logical lattice computation
+
+160691 operations
+Ran with 10 qubits in 6.114587783813477 seconds.
+
+Circuit as Pauli rotations:
+473 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+41367 rotations of which 8984 pi/8
+
+Converting to logical lattice computation
+
+200764 operations
+Ran with 11 qubits in 7.806261777877808 seconds.
+
+Circuit as Pauli rotations:
+564 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+50524 rotations of which 10982 pi/8
+
+Converting to logical lattice computation
+
+245259 operations
+Ran with 12 qubits in 9.368913650512695 seconds.
+
+Circuit as Pauli rotations:
+663 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+60607 rotations of which 13180 pi/8
+
+Converting to logical lattice computation
+
+294242 operations
+Ran with 13 qubits in 11.463552713394165 seconds.
+
+Circuit as Pauli rotations:
+770 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+71584 rotations of which 15574 pi/8
+
+Converting to logical lattice computation
+
+347575 operations
+Ran with 14 qubits in 13.391493558883667 seconds.
+
+Circuit as Pauli rotations:
+885 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+83461 rotations of which 18168 pi/8
+
+Converting to logical lattice computation
+
+405298 operations
+Ran with 15 qubits in 15.994606256484985 seconds.
+
+Circuit as Pauli rotations:
+1008 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+96268 rotations of which 20966 pi/8
+
+Converting to logical lattice computation
+
+467541 operations
+Ran with 16 qubits in 18.357944011688232 seconds.
+
+Circuit as Pauli rotations:
+1139 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+109969 rotations of which 23960 pi/8
+
+Converting to logical lattice computation
+
+534134 operations
+Ran with 17 qubits in 21.86596941947937 seconds.
+
+Circuit as Pauli rotations:
+1278 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+124604 rotations of which 27154 pi/8
+
+Converting to logical lattice computation
+
+605253 operations
+Ran with 18 qubits in 24.802844762802124 seconds.
+
+Circuit as Pauli rotations:
+1425 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+140171 rotations of which 30548 pi/8
+
+Converting to logical lattice computation
+
+680890 operations
+Ran with 19 qubits in 28.384640216827393 seconds.
+
+Circuit as Pauli rotations:
+1580 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+156598 rotations of which 34130 pi/8
+
+Converting to logical lattice computation
+
+760703 operations
+Ran with 20 qubits in 32.38583779335022 seconds.
+
+Circuit as Pauli rotations:
+1743 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+173945 rotations of which 37908 pi/8
+
+Converting to logical lattice computation
+
+844970 operations
+Ran with 21 qubits in 36.180065393447876 seconds.
+
+Circuit as Pauli rotations:
+1914 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+192250 rotations of which 41894 pi/8
+
+Converting to logical lattice computation
+
+933891 operations
+Ran with 22 qubits in 42.860944509506226 seconds.
+
+Circuit as Pauli rotations:
+2093 rotations
+Circuit as Pauli rotations with only pi/2, pi/4, pi/8:
+211543 rotations of which 46096 pi/8
+
+Converting to logical lattice computation
+
+1027612 operations
+Ran with 23 qubits in 50.53678059577942 seconds.
+
+         531144215 function calls (525509025 primitive calls) in 337.529 seconds
+
+   Ordered by: cumulative time
+   List reduced from 831 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    1.152    1.152  337.541  337.541 /home/george/projects/latticesurgery-com/benchmark/qft_no_slices.py:34(experiment)
+       22    0.006    0.000  334.421   15.201 /home/george/projects/latticesurgery-com/benchmark/pipelines.py:7(step_by_step_benchmark)
+       22    0.000    0.000  214.577    9.753 ./src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:93(__init__)
+       22   17.643    0.802  214.574    9.753 ./src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:102(_load_circuit)
+  3944649   10.316    0.000  182.917    0.000 ./src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:156(expand_rotation)
+  3939589    5.627    0.000   94.630    0.000 ./src/lsqecc/pauli_rotations/rotation.py:218(__init__)
+  3939589    6.097    0.000   89.002    0.000 ./src/lsqecc/pauli_rotations/rotation.py:113(__init__)
+  1614240   15.677    0.000   82.961    0.000 ./src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:185(add_pi_over_four)
+  3939589   24.675    0.000   82.905    0.000 ./src/lsqecc/pauli_rotations/rotation.py:115(<listcomp>)
+       22    0.464    0.021   82.451    3.748 ./src/lsqecc/pauli_rotations/circuit.py:143(get_basic_form)
+    17017    0.076    0.000   79.994    0.005 ./src/lsqecc/pauli_rotations/rotation.py:284(to_basic_form_decomposition)
+     3542    0.959    0.000   77.787    0.022 ./src/lsqecc/pauli_rotations/rotation.py:243(to_basic_form_approximation)
+  1606241    3.095    0.000   71.717    0.000 ./src/lsqecc/pauli_rotations/rotation.py:314(from_r_gate)
+  1606241   13.904    0.000   60.568    0.000 ./src/lsqecc/pauli_rotations/rotation.py:304(from_list)
+ 70943997   33.569    0.000   58.297    0.000 /usr/lib/python3.10/enum.py:359(__call__)
+   355896    1.218    0.000   50.731    0.000 ./src/lsqecc/pauli_rotations/rotation.py:337(from_hadamard_gate)
+       22    0.005    0.000   36.175    1.644 ./src/lsqecc/pauli_rotations/segmented_qasm_parser.py:29(parse_str)
+       22    0.000    0.000   36.170    1.644 ./src/lsqecc/pauli_rotations/segmented_qasm_parser.py:51(__init__)
+       22    0.026    0.001   32.201    1.464 {built-in method _functools.reduce}
+      297    0.003    0.000   28.743    0.097 ./venv/lib/python3.10/site-packages/qiskit/qasm/qasm.py:45(parse)
+
+
+
+Collected data:
+[(14, 20, 2, 75), (33, 945, 200, 4544), (60, 2782, 598, 13445), (95, 5539, 1196, 26816), (138, 9212, 1990, 44625), (189, 13813, 2988, 66952), (248, 19350, 4190, 93829), (315, 25775, 5588, 125032), (390, 33118, 7186, 160691), (473, 41367, 8984, 200764), (564, 50524, 10982, 245259), (663, 60607, 13180, 294242), (770, 71584, 15574, 347575), (885, 83461, 18168, 405298), (1008, 96268, 20966, 467541), (1139, 109969, 23960, 534134), (1278, 124604, 27154, 605253), (1425, 140171, 30548, 680890), (1580, 156598, 34130, 760703), (1743, 173945, 37908, 844970), (1914, 192250, 41894, 933891), (2093, 211543, 46096, 1027612)]
+
+Process finished with exit code 0
