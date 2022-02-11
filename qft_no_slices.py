@@ -32,7 +32,7 @@ def gen_qft(num_qubits: int) -> str:
 
     # print("Decomposed QASM input:")
     decomposed_qft = qft.decompose()
-    # print(qkvis.circuit_drawer(decomposed_qft).single_string())
+    # print(qkvis.circuit_drawer(decomposed_qiskit_qft).single_string())
 
     return decomposed_qft.qasm()
 
@@ -66,7 +66,7 @@ def pipeline_with_resource_estimation(qasm:str):
     return higher_ord_rotations, total_rotations, magic_states, total_ops, resources
 
 
-def experiment(runs=23, start_n_qubits=2) -> Tuple[List[int],List[float], List[any]]:
+def experiment(runs=1, start_n_qubits=4) -> Tuple[List[int],List[float], List[any]]:
 
     value_range = list(range(start_n_qubits, runs+start_n_qubits))
     input_circuits = list(map(gen_qft,value_range))
