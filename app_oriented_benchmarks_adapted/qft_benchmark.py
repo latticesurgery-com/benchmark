@@ -8,6 +8,7 @@ import time
 
 import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+from qiskit.circuit.parameterexpression import  ParameterExpression
 
 import app_oriented_benchmarks_adapted._set_up_path
 
@@ -144,8 +145,7 @@ def qft_gate(input_size):
         if hidx < input_size - 1:
             num_crzs = i_qubit
             for j in range(0, num_crzs):
-                divisor = 2 ** (num_crzs - j)
-                qc.crz(math.pi / divisor, qr[hidx], qr[input_size - j - 1])
+                qc.crz(ParameterExpression({},f"pi/2^{(num_crzs - j)}"), qr[hidx], qr[input_size - j - 1])
                 num_gates += 1
                 depth += 1
 
