@@ -46,6 +46,3 @@ if __name__=="__main__":
     print(f"Time to generate: {time.time() - start}")
     biggest = get_biggest_number(aob_qft.qasm())
     print(f"Biggest rotation exponent: log_2({biggest}) = {math.log2(biggest)}")
-
-    #print(aob_qft.qasm())
-    print(PauliOpCircuit._manual_parse_from_reversible_qasm(aob_qft.qasm()))
