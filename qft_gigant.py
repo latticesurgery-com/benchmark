@@ -14,6 +14,9 @@ import qiskit.circuit.library.basis_change.qft as qkqft
 from lsqecc.pauli_rotations import PauliOpCircuit
 from lsqecc.logical_lattice_ops import logical_lattice_ops as llops
 
+import lsqecc.gates.parse
+from lsqecc.gates.gates_circuit import GatesCircuit
+
 import cprofile_pretty_printer
 from app_oriented_benchmarks_adapted import qft_benchmark
 
@@ -34,20 +37,35 @@ def experiment():
 
     print(f"num_qubits={num_qubits}")
 
-    print("\nGenerating qft with AO-Benchmark")
+    print("\nGenerating qft QASM with AO-Benchmark")
     start = time.time()
     aob_qft: qiskit.QuantumCircuit = qft_benchmark.qft_gate(num_qubits)
+    aob_qft_qasm = aob_qft.qasm()
     print(f"Time to generate: {time.time() - start}")
 
-    circuit=PauliOpCircuit._manual_parse_from_reversible_qasm(aob_qft.qasm())
-    print("Generated: ", circuit)
+    aob_qft_qasm = aob_qft.qasm()
 
-    print("Approximate all gates with pi/2, pi/4, pi/8 rotations")
+    print("\nRead circuit as Gate based Circuit")
+    start = time.time()
+    circuit_of_gates = GatesCircuit.from_qasm(aob_qft_qasm)
+    print(f"Generated {len(circuit_of_gates.gates)} gates (took {time.time() - start})")
+
+    print("\nReduce the Gate based Circuit to Clifford + T")
+    start = time.time()
+    clifford_plus_t_circuit_of_gates = circuit_of_gates.to_clifford_plus_t()
+    print(f"Generated {len(clifford_plus_t_circuit_of_gates.gates)} gates (took {time.time() - start})")
+
+    print("\nRead as circuit of Pauli Rotations")
+    start = time.time()
+    circuit=PauliOpCircuit._manual_parse_from_reversible_qasm(aob_qft_qasm)
+    print(f"Generated {len(circuit.ops)} rotations (took {time.time() - start}s)")
+
+    print("\nApproximate all gates with pi/2, pi/4, pi/8 Pauli Rotations")
     start = time.time()
     circuit=circuit.get_basic_form()
-    print(f"Generated (took {time.time()-start}: ", circuit)
+    print(f"Generated {len(circuit.ops)} rotations (took {time.time() - start}s)")
 
-    print("Make logical lattice ops")
+    print("\nMake logical lattice ops")
     start = time.time()
     logical_computation = llops.LogicalLatticeComputation(circuit)
     print(f"Generated (took {time.time() - start}s): ", circuit)
