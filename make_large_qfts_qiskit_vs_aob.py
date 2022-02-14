@@ -46,3 +46,17 @@ if __name__=="__main__":
     print(f"Time to generate: {time.time() - start}")
     biggest = get_biggest_number(aob_qft.qasm())
     print(f"Biggest rotation exponent: log_2({biggest}) = {math.log2(biggest)}")
+
+    """
+    On my laptop, output looks something like:
+    
+    num_qubits=150
+
+    Generating qft with qiskit
+    Time to generate: 1.737332820892334
+    Biggest rotation exponent: log_2(281474976710656) = 48.0
+    
+    Generating qft with AO-Benchmark
+    Time to generate: 0.5367403030395508
+    Biggest rotation exponent: log_2(713623846352979940529142984724747568191373312) = 149.0
+    """
