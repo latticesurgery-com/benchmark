@@ -16,6 +16,7 @@ from lsqecc.logical_lattice_ops import logical_lattice_ops as llops
 
 import lsqecc.gates.parse
 from lsqecc.gates.gates_circuit import GatesCircuit
+from lsqecc.ls_instructions.ls_instructions_from_gates import LSInstructionsFromGatesGenerator
 
 import cprofile_pretty_printer
 from app_oriented_benchmarks_adapted import qft_benchmark
@@ -33,7 +34,7 @@ def get_biggest_number(qasm: str):
 
 
 def experiment():
-    num_qubits = 20
+    num_qubits = 15
 
     print(f"num_qubits={num_qubits}")
 
@@ -41,21 +42,28 @@ def experiment():
     start = time.time()
     aob_qft: qiskit.QuantumCircuit = qft_benchmark.qft_gate(num_qubits)
     aob_qft_qasm = aob_qft.qasm()
-    print(f"Time to generate: {time.time() - start}")
+    print(f"Time to generate: {time.time() - start}s")
 
-    aob_qft_qasm = aob_qft.qasm()
-
-    print("\nRead circuit as Gate based Circuit")
+    print("\nPipeline 1: Gate based Circuit")
+    print("Read circuit as Gate based Circuit")
     start = time.time()
     circuit_of_gates = GatesCircuit.from_qasm(aob_qft_qasm)
-    print(f"Generated {len(circuit_of_gates.gates)} gates (took {time.time() - start})")
+    print(f"Generated {len(circuit_of_gates.gates)} gates (took {time.time() - start}s)")
 
     print("\nReduce the Gate based Circuit to Clifford + T")
     start = time.time()
     clifford_plus_t_circuit_of_gates = circuit_of_gates.to_clifford_plus_t()
-    print(f"Generated {len(clifford_plus_t_circuit_of_gates.gates)} gates (took {time.time() - start})")
+    print(f"Generated {len(clifford_plus_t_circuit_of_gates.gates)} gates (took {time.time() - start}s)")
 
-    print("\nRead as circuit of Pauli Rotations")
+    print("\n\nGenerate LS Instructions")
+    start = time.time()
+    text = LSInstructionsFromGatesGenerator.text_from_gates_circuit(clifford_plus_t_circuit_of_gates)
+    stage_time = time.time() - start
+    nlines = text.count('\n')
+    print(f"Generated {nlines} lines (took {stage_time}s)")
+
+    print("\nPipeline 2: Pauli Rotations based computation")
+    print("Read as circuit of Pauli Rotations")
     start = time.time()
     circuit=PauliOpCircuit._manual_parse_from_reversible_qasm(aob_qft_qasm)
     print(f"Generated {len(circuit.ops)} rotations (took {time.time() - start}s)")
@@ -68,7 +76,7 @@ def experiment():
     print("\nMake logical lattice ops")
     start = time.time()
     logical_computation = llops.LogicalLatticeComputation(circuit)
-    print(f"Generated (took {time.time() - start}s): ", circuit)
+    print(f"Generated {len(logical_computation.ops)} LLops (took {time.time() - start}s) ")
 
 
 if __name__=="__main__":
