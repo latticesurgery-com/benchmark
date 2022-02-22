@@ -117,16 +117,16 @@ num_qubits = 100
 Generate LS Instructions
 Generated 33099703 lines and 594603858 chars (took 243.13084316253662s)
 
-If we were to write tthe instructions on this last run, they would be ~330MB.
+If we were to write tthe instructions on this last run, they would be ~600MB.
 Some profiling
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1   14.891   14.891  149.116  149.116 /home/george/projects/latticesurgery-com/benchmark/qft_gigant.py:36(experiment)
-  8358069    9.424    0.000   73.894    0.000 /home/george/projects/latticesurgery-com/benchmark/qft_gigant.py:66(<listcomp>)
- 18360993    7.734    0.000   62.525    0.000 {built-in method builtins.repr}
-  3339858    4.672    0.000   34.837    0.000 ./src/lsqecc/ls_instructions/ls_instructions.py:52(__repr__)
-  8358069   22.415    0.000   32.701    0.000 ./src/lsqecc/ls_instructions/ls_instructions_from_gates.py:19(gen_instructions)
-  3358008    3.598    0.000   29.752    0.000 {method 'join' of 'str' objects}
- 10018811   16.451    0.000   29.404    0.000 /usr/lib/python3.10/enum.py:764(__format__)
+        1   29.631   29.631  288.336  288.336 /home/george/projects/latticesurgery-com/benchmark/qft_gigant.py:36(experiment)
+ 15066025   17.818    0.000  140.194    0.000 /home/george/projects/latticesurgery-com/benchmark/qft_gigant.py:66(<listcomp>)
+ 33099703   14.295    0.000  118.690    0.000 {built-in method builtins.repr}
+ 15066025   47.648    0.000   67.400    0.000 ./src/lsqecc/ls_instructions/ls_instructions_from_gates.py:19(gen_instructions)
+  6021126    8.829    0.000   66.283    0.000 ./src/lsqecc/ls_instructions/ls_instructions.py:52(__repr__)
+  6050201    6.903    0.000   56.647    0.000 {method 'join' of 'str' objects}
+ 18061808   30.853    0.000   55.383    0.000 /usr/lib/python3.10/enum.py:764(__format__)
 
 
 ===== Running with lattice-surgery-compiler on 533b2cf ======
