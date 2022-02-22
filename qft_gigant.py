@@ -34,7 +34,7 @@ def get_biggest_number(qasm: str):
 
 
 def experiment():
-    num_qubits = 15
+    num_qubits = 100
 
     print(f"num_qubits={num_qubits}")
 
@@ -57,10 +57,20 @@ def experiment():
 
     print("\n\nGenerate LS Instructions")
     start = time.time()
-    text = LSInstructionsFromGatesGenerator.text_from_gates_circuit(clifford_plus_t_circuit_of_gates)
+    g = LSInstructionsFromGatesGenerator()
+    lines = 0
+    chars = 0
+    for gate in clifford_plus_t_circuit_of_gates.gates:
+        instructions = g.gen_instructions(gate)
+        lines += len(instructions)
+        chars += sum([len(repr(s))+1 for s in instructions])
+
     stage_time = time.time() - start
-    nlines = text.count('\n')
-    print(f"Generated {nlines} lines (took {stage_time}s)")
+
+    print(f"Generated {lines} lines and {chars} chars (took {stage_time}s)")
+
+
+    return
 
     print("\nPipeline 2: Pauli Rotations based computation")
     print("Read as circuit of Pauli Rotations")
@@ -87,6 +97,38 @@ if __name__=="__main__":
     print(cprofile_pretty_printer.pretty_print(profiler))
 
 """
+
+===== Only measure size of LS Instructions =======
+(lattice-surgery-compiler on ddd9743 first implementation)
+
+num_qubit=25
+Generate LS Instructions
+Generated 1877746 lines and 32567232 chars (took 12.6033935546875s)
+
+num_qubit=50 
+Generate LS Instructions
+Generated 7994890 lines and 141436488 chars (took 55.0093789100647s)
+
+num_qubits=75
+Generate LS Instructions
+Generated 18360993 lines and 328483178 chars (took 124.5641438961029s)
+
+num_qubits = 100
+Generate LS Instructions
+Generated 33099703 lines and 594603858 chars (took 243.13084316253662s)
+
+If we were to write tthe instructions on this last run, they would be ~330MB.
+Some profiling
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1   14.891   14.891  149.116  149.116 /home/george/projects/latticesurgery-com/benchmark/qft_gigant.py:36(experiment)
+  8358069    9.424    0.000   73.894    0.000 /home/george/projects/latticesurgery-com/benchmark/qft_gigant.py:66(<listcomp>)
+ 18360993    7.734    0.000   62.525    0.000 {built-in method builtins.repr}
+  3339858    4.672    0.000   34.837    0.000 ./src/lsqecc/ls_instructions/ls_instructions.py:52(__repr__)
+  8358069   22.415    0.000   32.701    0.000 ./src/lsqecc/ls_instructions/ls_instructions_from_gates.py:19(gen_instructions)
+  3358008    3.598    0.000   29.752    0.000 {method 'join' of 'str' objects}
+ 10018811   16.451    0.000   29.404    0.000 /usr/lib/python3.10/enum.py:764(__format__)
+
+
 ===== Running with lattice-surgery-compiler on 533b2cf ======
 
 Assuming linear runtime, it would take 20 min to compile 150 qubits on this laptop
