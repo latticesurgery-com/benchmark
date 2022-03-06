@@ -2,7 +2,7 @@ import cProfile
 import math
 import time
 import traceback
-from typing import List, Tuple
+from typing import List, Tuple, TextIO, cast
 import re
 
 import matplotlib.pyplot as plt
@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import qiskit.visualization as qkvis
 import qiskit
 import qiskit.circuit.library.basis_change.qft as qkqft
+from lsqecc.ls_instructions.shorthand_file_writer import ShorthandFileWriter
 
 from lsqecc.pauli_rotations import PauliOpCircuit
 from lsqecc.logical_lattice_ops import logical_lattice_ops as llops
@@ -31,6 +32,13 @@ def get_biggest_number(qasm: str):
 
     return max(big_denominators)
 
+
+class CharCounterFile:
+    def __init__(self):
+        self.ch_count = 0
+
+    def write(self, s):
+        self.ch_count += len(s)
 
 
 def experiment():
@@ -59,15 +67,23 @@ def experiment():
     start = time.time()
     g = LSInstructionsFromGatesGenerator()
     lines = 0
-    chars = 0
+    chars_full = 0
+
+    char_counter_file = CharCounterFile()
+    shorthand_writer = ShorthandFileWriter(cast(TextIO,char_counter_file))
+
     for gate in clifford_plus_t_circuit_of_gates.gates:
         instructions = g.gen_instructions(gate)
         lines += len(instructions)
-        chars += sum([len(repr(s))+1 for s in instructions])
+        chars_full += sum([len(repr(s))+1 for s in instructions])
+        for instruction in instructions:
+            shorthand_writer.write_instruction(instruction)
+        
 
     stage_time = time.time() - start
 
-    print(f"Generated {lines} lines and {chars} chars (took {stage_time}s)")
+    print(f"Generated: {lines} lines, {chars_full} chars for mnemonics and {char_counter_file.ch_count} for shorthand LS")
+    print(f"Took {stage_time}s)")
 
 
     return
@@ -120,8 +136,8 @@ Generated 33099703 lines and 594603858 chars (took 243.13084316253662s)
 If we were to write tthe instructions on this last run, they would be ~600MB.
 Some profiling
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1   29.631   29.631  288.336  288.336 /home/george/projects/latticesurgery-com/benchmark/qft_gigant.py:36(experiment)
- 15066025   17.818    0.000  140.194    0.000 /home/george/projects/latticesurgery-com/benchmark/qft_gigant.py:66(<listcomp>)
+        1   29.631   29.631  288.336  288.336 /home/george/projects/latticesurgery-com/benchmark/qft_gigant_estimate_write_size.py:36(experiment)
+ 15066025   17.818    0.000  140.194    0.000 /home/george/projects/latticesurgery-com/benchmark/qft_gigant_estimate_write_size.py:66(<listcomp>)
  33099703   14.295    0.000  118.690    0.000 {built-in method builtins.repr}
  15066025   47.648    0.000   67.400    0.000 ./src/lsqecc/ls_instructions/ls_instructions_from_gates.py:19(gen_instructions)
   6021126    8.829    0.000   66.283    0.000 ./src/lsqecc/ls_instructions/ls_instructions.py:52(__repr__)
@@ -145,7 +161,7 @@ Generated (took 136.13677263259888s):  PauliOpCircuit : 20 qubit(s), 953005 bloc
    Ordered by: cumulative time
    List reduced from 2498 to 20 due to restriction <20>
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.000    0.000  189.015  189.015 ./qft_gigant.py:32(experiment)
+        1    0.000    0.000  189.015  189.015 ./qft_gigant_estimate_write_size.py:32(experiment)
         1    0.000    0.000  136.137  136.137 /home/george/projects/latticesurgery-com/lattice-surgery-compiler/src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:93(__init__)
         1   11.092   11.092  136.137  136.137 /home/george/projects/latticesurgery-com/lattice-surgery-compiler/src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:102(_load_circuit)
   2326652    6.583    0.000  116.078    0.000 /home/george/projects/latticesurgery-com/lattice-surgery-compiler/src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:156(expand_rotation)
@@ -181,7 +197,7 @@ Generated (took 116.9310896396637s):  PauliOpCircuit : 20 qubit(s), 953005 block
    Ordered by: cumulative time
    List reduced from 2349 to 20 due to restriction <20>
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.003    0.003  166.393  166.393 /home/george/projects/latticesurgery-com/benchmark/qft_gigant.py:32(experiment)
+        1    0.003    0.003  166.393  166.393 /home/george/projects/latticesurgery-com/benchmark/qft_gigant_estimate_write_size.py:32(experiment)
         1    0.000    0.000  116.931  116.931 ./src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:93(__init__)
         1   11.289   11.289  116.931  116.931 ./src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:102(_load_circuit)
   2326652    6.218    0.000   97.361    0.000 ./src/lsqecc/logical_lattice_ops/logical_lattice_ops.py:156(expand_rotation)
