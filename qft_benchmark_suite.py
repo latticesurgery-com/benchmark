@@ -11,7 +11,7 @@ LAYOUT="../liblsqecc/140qubit.txt"
 if __name__ == "__main__":
 
     print("qubit_num, ls_instruction_count,slices_count,slicing_time_s, total_time_s")
-    for qubit_num in range(128,129,1):
+    for qubit_num in range(8,129,20):
         start = time.time()
         command_output = subprocess.check_output(
             f"{GENERATOR_EXECUTABLE} {qubit_num} | {SLICER_EXECUTABLE} -l {LAYOUT} -f machine", shell=True).decode('utf-8')
