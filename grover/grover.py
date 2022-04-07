@@ -32,7 +32,7 @@ class ForceReplaceWithDefinitionPass(TransformationPass):
                 dag.substitute_node_with_dag(node, circuit_to_dag(node.op.definition))
         return dag
 
-class UnitaryToPhase(TransformationPass):
+class GenericUnitaryToSpecificGate(TransformationPass):
     def run(self, dag):
         for node in dag.op_nodes():
             if node.op.name == "u1":
@@ -89,14 +89,14 @@ if __name__ == "__main__":
         qc = PassManager([PhasesToRZPass(),
                           ForceReplaceWithDefinitionPass(["rcccx","rcccx_dg","c3sx"]),
                           ForceReplaceWithDefinitionPass(["cu1"]),
-                          UnitaryToPhase()
+                          GenericUnitaryToSpecificGate()
                           ]).run(qc)
     elif num_qubits >= 6:
         qc = qc.decompose(["mcx_gray","mcu1"])
         qc = PassManager([PhasesToRZPass(),
                           ForceReplaceWithDefinitionPass(["mcu1"]),
                           ForceReplaceWithDefinitionPass(["cu1"]),
-                          UnitaryToPhase()
+                          GenericUnitaryToSpecificGate()
                           ]).run(qc)
 
 
