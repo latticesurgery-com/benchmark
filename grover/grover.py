@@ -1,4 +1,7 @@
-from typing import List
+import time
+from typing import List, cast, TextIO
+
+from lsqecc.ls_instructions.shorthand_file_writer import ShorthandFileWriter
 
 from app_oriented_benchmarks_adapted import grovers_benchmark
 
@@ -14,6 +17,8 @@ from qiskit.converters import circuit_to_dag
 from qiskit.transpiler import TransformationPass,PassManager
 
 from lsqecc.ls_instructions.ls_instructions_from_gates import LSInstructionsFromGatesGenerator
+
+from qft_gigant_estimate_write_size import CharCounterFile
 
 
 class ForceReplaceWithDefinitionPass(TransformationPass):
@@ -66,7 +71,7 @@ class PhasesToRZPass(TransformationPass):
 
 if __name__ == "__main__":
 
-    num_qubits = 5
+    num_qubits = 8
     marked_item = 6
     n_iterations = int(np.pi * np.sqrt(2 ** num_qubits) / 4)
 
@@ -86,13 +91,36 @@ if __name__ == "__main__":
                           ForceReplaceWithDefinitionPass(["cu1"]),
                           UnitaryToPhase()
                           ]).run(qc)
+    elif num_qubits >= 6:
+        qc = qc.decompose(["mcx_gray","mcu1"])
+        qc = PassManager([PhasesToRZPass(),
+                          ForceReplaceWithDefinitionPass(["mcu1"]),
+                          ForceReplaceWithDefinitionPass(["cu1"]),
+                          UnitaryToPhase()
+                          ]).run(qc)
 
 
     print(qc.qasm())
 
+    start=time.time()
+
     circuit_of_gates = GatesCircuit.from_qasm(qc.qasm())
     circuit_of_gates = circuit_of_gates.to_clifford_plus_t()
-    g = LSInstructionsFromGatesGenerator(num_qubits)
-    text = g.text_from_gates_circuit(circuit_of_gates)
-    print(text.count("\n"))
 
+    g = LSInstructionsFromGatesGenerator()
+    lines = 0
+    chars_full = 0
+
+    char_counter_file = CharCounterFile()
+    shorthand_writer = ShorthandFileWriter(cast(TextIO, char_counter_file))
+
+    for gate in circuit_of_gates.gates:
+        instructions = g.gen_instructions(gate)
+        lines += len(instructions)
+        chars_full += sum([len(repr(s))+1 for s in instructions])
+        for instruction in instructions:
+            shorthand_writer.write_instruction(instruction)
+
+    print(
+        f"Generated: {lines} lines, {chars_full} chars for mnemonics and {char_counter_file.ch_count} for shorthand LS")
+    print(f"Time to generate: {time.time() - start}s")
