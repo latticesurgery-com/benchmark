@@ -1,6 +1,7 @@
 import time
 from typing import List, cast, TextIO
 
+from lsqecc.gates.parse import IGNORED_INSTRUCTIONS
 from lsqecc.ls_instructions.shorthand_file_writer import ShorthandFileWriter
 
 from app_oriented_benchmarks_adapted import grovers_benchmark
@@ -13,7 +14,7 @@ import qiskit
 from lsqecc.gates.gates_circuit import GatesCircuit
 
 from qiskit.circuit import QuantumCircuit
-from qiskit.converters import circuit_to_dag
+from qiskit.converters import circuit_to_dag, dag_to_circuit
 from qiskit.transpiler import TransformationPass,PassManager
 
 from lsqecc.ls_instructions.ls_instructions_from_gates import LSInstructionsFromGatesGenerator
@@ -69,9 +70,19 @@ class PhasesToRZPass(TransformationPass):
 
 
 
+def drop_circuit_boilerplate(qasm : str) -> str:
+    return "\n".join([ line for line in qasm.split("\n") if not any(key in line for key in IGNORED_INSTRUCTIONS)])
+
+def collect_circuit_boilerplate(qasm: str) -> str:
+    return "\n".join([line for line in qasm.split("\n") if any(key in line for key in IGNORED_INSTRUCTIONS)])
+
+def layer_to_qasm(layer) -> str:
+    return dag_to_circuit(layer["graph"]).qasm()
+
+
 if __name__ == "__main__":
 
-    num_qubits = 8
+    num_qubits = 7
     marked_item = 6
     n_iterations = int(np.pi * np.sqrt(2 ** num_qubits) / 4)
 
@@ -99,12 +110,18 @@ if __name__ == "__main__":
                           GenericUnitaryToSpecificGate()
                           ]).run(qc)
 
+    first_layer = next(circuit_to_dag(qc).layers())
+    qasm = collect_circuit_boilerplate(layer_to_qasm(first_layer)) + "\n"
 
-    print(qc.qasm())
+    layers = circuit_to_dag(qc).layers()
+    for layer in layers:
+        qasm += drop_circuit_boilerplate(layer_to_qasm(layer)) + "\n"
+
+    print(qasm)
 
     start=time.time()
 
-    circuit_of_gates = GatesCircuit.from_qasm(qc.qasm())
+    circuit_of_gates = GatesCircuit.from_qasm(qasm)
     circuit_of_gates = circuit_of_gates.to_clifford_plus_t()
 
     g = LSInstructionsFromGatesGenerator()
