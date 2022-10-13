@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+import sys
+sys.path.extend(['/home/varunseshadri/projects/lattice-surgery/benchmark/', '/home/varunseshadri/projects/lattice-surgery/lattice-surgery-compiler/src'])
 import time
 from typing import List, cast, TextIO
 
@@ -19,7 +22,7 @@ from qiskit.transpiler import TransformationPass,PassManager
 
 from lsqecc.ls_instructions.ls_instructions_from_gates import LSInstructionsFromGatesGenerator
 
-from qft_gigant_estimate_write_size import CharCounterFile
+from QFT.qft_gigant_estimate_write_size import CharCounterFile
 
 
 class ForceReplaceWithDefinitionPass(TransformationPass):
@@ -79,14 +82,12 @@ def collect_circuit_boilerplate(qasm: str) -> str:
 def layer_to_qasm(layer) -> str:
     return dag_to_circuit(layer["graph"]).qasm()
 
+def run(num_qubits:int):
 
-if __name__ == "__main__":
-
-    num_qubits = 7
-    marked_item = 6
+    marked_item = num_qubits -1
     n_iterations = int(np.pi * np.sqrt(2 ** num_qubits) / 4)
 
-    qc = grovers_benchmark.GroversSearch(num_qubits, 6, n_iterations)
+    qc = grovers_benchmark.GroversSearch(num_qubits, marked_item, n_iterations)
 
     # Expand the boxes
     qc = qc.decompose(["diffuser","oracle"])
@@ -117,12 +118,12 @@ if __name__ == "__main__":
     for layer in layers:
         qasm += drop_circuit_boilerplate(layer_to_qasm(layer)) + "\n"
 
-    print(qasm)
+    # print(qasm)
 
     start=time.time()
 
     circuit_of_gates = GatesCircuit.from_qasm(qasm)
-    circuit_of_gates = circuit_of_gates.to_clifford_plus_t()
+    circuit_of_gates = circuit_of_gates.to_clifford_plus_t();
 
     g = LSInstructionsFromGatesGenerator()
     lines = 0
@@ -137,7 +138,12 @@ if __name__ == "__main__":
         chars_full += sum([len(repr(s))+1 for s in instructions])
         for instruction in instructions:
             shorthand_writer.write_instruction(instruction)
+            # print(instruction)
 
+    # return [lines, chars_full, char_counter_file.ch_count]
     print(
         f"Generated: {lines} lines, {chars_full} chars for mnemonics and {char_counter_file.ch_count} for shorthand LS")
     print(f"Time to generate: {time.time() - start}s")
+    return {'num_qubits': num_qubits, 'lines': lines, 'chars_full': chars_full, 'chars_sh': char_counter_file.ch_count, 'time': time.time() - start }
+    # return shorthand_writer
+if __name__ == "__main__": run()
