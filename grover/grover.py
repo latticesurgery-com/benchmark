@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import pathlib
 sys.path.extend(['/home/varunseshadri/projects/lattice-surgery/benchmark/', '/home/varunseshadri/projects/lattice-surgery/lattice-surgery-compiler/src'])
 import time
 from typing import List, cast, TextIO
@@ -82,7 +83,10 @@ def collect_circuit_boilerplate(qasm: str) -> str:
 def layer_to_qasm(layer) -> str:
     return dag_to_circuit(layer["graph"]).qasm()
 
-def run(num_qubits:int):
+
+def gen_benchmark_circuit(num_qubits: int):
+
+    MAX_QUBITS = 15
 
     marked_item = num_qubits -1
     n_iterations = int(np.pi * np.sqrt(2 ** num_qubits) / 4)
@@ -118,6 +122,18 @@ def run(num_qubits:int):
     for layer in layers:
         qasm += drop_circuit_boilerplate(layer_to_qasm(layer)) + "\n"
 
+    return qasm
+
+def run(num_qubits:int):
+    MAX_QUBITS = 15
+    path_str = f"grover/grover_raw/grover_raw_{num_qubits}.qasm"
+    if pathlib.Path(path_str).exists():
+        with open(path_str,'r') as f:
+            qasm = f.read()
+    elif num_qubits<= MAX_QUBITS:
+        qasm = gen_benchmark_circuit(num_qubits)
+    else:
+        raise ValueError(f"num_qubits: {num_qubits} exceeds max qubits:{MAX_QUBITS}")
     # print(qasm)
 
     start=time.time()
