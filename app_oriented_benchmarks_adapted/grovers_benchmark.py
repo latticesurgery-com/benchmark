@@ -4,11 +4,12 @@ Grover's Search Benchmark Program - Qiskit
 
 import sys
 import time
+sys.path[1:1] = ["/home/varunseshadri/projects/lattice-surgery/benchmark/external/QC-App-Oriented-Benchmarks/_common","/home/varunseshadri/projects/lattice-surgery/benchmark/external/QC-App-Oriented-Benchmarks/_common/qiskit"]
 
 import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 
-import app_oriented_benchmarks_adapted._set_up_path
+# import app_oriented_benchmarks_adapted._set_up_path
 
 import execute as ex
 import metrics as metrics
@@ -30,8 +31,8 @@ _use_mcx_shim = False
 
 def GroversSearch(num_qubits, marked_item, n_iterations):
     # allocate qubits
-    qr = QuantumRegister(num_qubits);
-    cr = ClassicalRegister(num_qubits);
+    qr = QuantumRegister(num_qubits)
+    cr = ClassicalRegister(num_qubits)
     qc = QuantumCircuit(qr, cr, name="main")
 
     # Start with Hadamard on all qubits

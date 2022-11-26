@@ -139,7 +139,7 @@ def run(num_qubits:int):
     start=time.time()
 
     circuit_of_gates = GatesCircuit.from_qasm(qasm)
-    circuit_of_gates = circuit_of_gates.to_clifford_plus_t();
+    circuit_of_gates = circuit_of_gates.to_clifford_plus_t()
 
     g = LSInstructionsFromGatesGenerator()
     lines = 0
