@@ -69,6 +69,13 @@ class PhasesToRZPass(TransformationPass):
                 replacement = QuantumCircuit(1)
                 replacement.rz(-np.pi/4,0)
                 dag.substitute_node_with_dag(node, circuit_to_dag(replacement))
+            if node.op.name == "sx":
+                replacement = QuantumCircuit(1)
+                # replacement.rz(np.pi/4, 0) # global phase
+                replacement.h(0)
+                replacement.rz(np.pi/2, 0)
+                replacement.h(0)
+                dag.substitute_node_with_dag(node, circuit_to_dag(replacement))
 
         return dag
 
@@ -87,7 +94,7 @@ def layer_to_qasm(layer) -> str:
 def gen_benchmark_circuit(num_qubits: int):
 
     MAX_QUBITS = 15
-
+    start = time.time()
     marked_item = num_qubits -1
     n_iterations = int(np.pi * np.sqrt(2 ** num_qubits) / 4)
 
@@ -100,6 +107,7 @@ def gen_benchmark_circuit(num_qubits: int):
         qc = qc.decompose("ccx")
     elif num_qubits == 4:
         qc = qc.decompose("mcx")
+        qc = PassManager([PhasesToRZPass()]).run(qc)
     elif num_qubits == 5:
         qc = qc.decompose(["mcx"])
         qc = PassManager([PhasesToRZPass(),
@@ -122,25 +130,34 @@ def gen_benchmark_circuit(num_qubits: int):
     for layer in layers:
         qasm += drop_circuit_boilerplate(layer_to_qasm(layer)) + "\n"
 
+    # print(qasm)
     return qasm
 
-def run(num_qubits:int):
+def gen_shorthand_instructions(num_qubits:int=3):
     MAX_QUBITS = 15
-    path_str = f"grover/grover_raw/grover_raw_{num_qubits}.qasm"
-    if pathlib.Path(path_str).exists():
-        with open(path_str,'r') as f:
-            qasm = f.read()
-    elif num_qubits<= MAX_QUBITS:
-        qasm = gen_benchmark_circuit(num_qubits)
-    else:
-        raise ValueError(f"num_qubits: {num_qubits} exceeds max qubits:{MAX_QUBITS}")
-    # print(qasm)
+    bdata: dict = {}
+    start = time.time()
+    qasm = gen_benchmark_circuit(num_qubits)
+    bdata.update(dict(qasm_time=time.time() - start))
+    # print(f"Time to generate qasm:{time.time() - bdata['start']}s")
 
-    start=time.time()
+    # path_str = f"grover/grover_raw/grover_raw_{num_qubits}.qasm"
+    # if pathlib.Path(path_str).exists():
+    #     with open(path_str,'r') as f:
+    #         qasm = f.read()
+    # elif num_qubits<= MAX_QUBITS:
+    #     qasm = gen_benchmark_circuit(num_qubits)
+    # else:
+    #     raise ValueError(f"num_qubits: {num_qubits} exceeds max qubits:{MAX_QUBITS}")
+
+
 
     circuit_of_gates = GatesCircuit.from_qasm(qasm)
     circuit_of_gates = circuit_of_gates.to_clifford_plus_t()
+    bdata.update(dict(cliffordT_tim=time.time() - start))
 
+    # print(f"Time to convert to Clifford+T: {time.time() - bdata['start']}s")
+    # start = time.time()
     g = LSInstructionsFromGatesGenerator()
     lines = 0
     chars_full = 0
@@ -156,10 +173,20 @@ def run(num_qubits:int):
             shorthand_writer.write_instruction(instruction)
             # print(instruction)
 
-    # return [lines, chars_full, char_counter_file.ch_count]
-    print(
-        f"Generated: {lines} lines, {chars_full} chars for mnemonics and {char_counter_file.ch_count} for shorthand LS")
-    print(f"Time to generate: {time.time() - start}s")
-    return {'num_qubits': num_qubits, 'lines': lines, 'chars_full': chars_full, 'chars_sh': char_counter_file.ch_count, 'time': time.time() - start }
+    # print(
+    #     f"Generated: {lines} lines, {chars_full} chars for mnemonics and {char_counter_file.ch_count} for shorthand LS")
+    # print(f"Time to generate instructions from qasm: {time.time() - start}s")
+    # print("All times are measured from beginning of the execution of the program")
+    bdata.update(
+        {
+            'num_qubits': num_qubits,
+            'lines': lines,
+            'chars_full': chars_full,
+            'chars_sh': char_counter_file.ch_count,
+            'instruction_gen_time': time.time() - start
+        }
+    )
+    return bdata
     # return shorthand_writer
-if __name__ == "__main__": run()
+if __name__ == "__main__":
+    gen_shorthand_instructions(int(sys.argv[1]))
