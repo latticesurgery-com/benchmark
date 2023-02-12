@@ -1,0 +1,23 @@
+qubit_num, ls_instruction_count,slices_count,slicing_time_s, total_time_s
+(3, LS Instructions read  254
+Slices 182
+Made patch computation. Took 0.838098s., 0.8443176746368408),
+5, LS Instructions read  2450
+Slices 1902
+Made patch computation. Took 10.0562s., 10.074852228164673),
+6, LS Instructions read  6900
+Slices 5991
+Made patch computation. Took 32.0401s., 32.08932876586914),
+7, LS Instructions read  18462
+Slices 16179
+Made patch computation. Took 87.4178s., 87.4247179031372),
+8, LS Instructions read  55384
+Slices 48843
+Made patch computation. Took 272.513s., 272.5282256603241),
+9, LS Instructions read  156962
+Slices 138825
+Made patch computation. Took 757.577s., 757.581827878952),
+Grover-10
+LS Instructions read  461320
+Slices 408953
+Made patch computation. Took 2299.2s.

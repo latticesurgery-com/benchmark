@@ -95,3 +95,6 @@ cython_debug/
 *.iws
 out/
 
+### pyenv
+.python-version
+nohup.out
